@@ -37,6 +37,7 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
     }
 
     private fun initiateTransaction(call: MethodCall) {
+        var parameter: String = ""
         val app: String? = call.argument("app")
         val pa: String? = call.argument("pa")
         val pn: String? = call.argument("pn")
@@ -47,26 +48,24 @@ class UpiPayPlugin internal constructor(registrar: Registrar, channel: MethodCha
         val cu: String? = call.argument("cu")
         val url: String? = call.argument("url")
 
-        try {
-            val uriBuilder = Uri.Builder()
-            uriBuilder.scheme("upi").authority("pay")
-            uriBuilder.appendQueryParameter("pa", pa)
-            uriBuilder.appendQueryParameter("pn", pn)
-            uriBuilder.appendQueryParameter("tr", tr)
-            uriBuilder.appendQueryParameter("am", am)
-            uriBuilder.appendQueryParameter("cu", cu)
+        try {            
+            parameter += "pa=" + pa
+            parameter += "&pn=" + pn
+            parameter += "&tr=" + tr
+            parameter += "&am=" + am
+            parameter += "&cu=" + cu
+
             if (url != null) {
-                uriBuilder.appendQueryParameter("url", url)
+                parameter += "&url=" + url
             }
             if (mc != null) {
-                uriBuilder.appendQueryParameter("mc", mc)
+                parameter += "&mc=" + mc
             }
             if (tn != null) {
-                uriBuilder.appendQueryParameter("tn", tn)
+                parameter += "&tn=" + tn
             }
 
-            val uri = uriBuilder.build()
-            val intent = Intent(Intent.ACTION_VIEW, uri)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse("upi://pay?"+parameter))
             intent.setPackage(app)
 
             if (intent.resolveActivity(activity.packageManager) == null) {
