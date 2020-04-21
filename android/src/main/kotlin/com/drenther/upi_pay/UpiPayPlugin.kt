@@ -1,4 +1,4 @@
-package com.drenther.upi_pay
+package com.happyflutterapps.upi_pay
 
 import android.content.Intent
 import android.content.pm.PackageManager
